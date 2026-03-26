@@ -95,7 +95,7 @@ int main() {
 }
 
 // Чтоение матрицы из Файла
-double** ReadMatrixFromFile(const char* filename, int* n, int* m) 
+double** ReadMatrixFromFile(const char* filename, int* n, int* m)
 {
 	// Файл
 	ifstream file(filename);
@@ -129,7 +129,7 @@ double** ReadMatrixFromFile(const char* filename, int* n, int* m)
 	// Закрытие файла
 	file.close();
 	// Дефолтный возврат
-	return nullptr;
+	return matrix;
 }
 
 // Вывод матрицы
