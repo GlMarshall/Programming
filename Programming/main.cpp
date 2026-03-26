@@ -33,13 +33,11 @@ void FreeMatrix(double** matrix, int n);
 
 
 int main() {
-	// Работа с матрицей А
 	cout << "--- Matrix A ---" << endl;
-	// Декларация строк и столбцов
-	int n1, m1;
-	// Чтение Матрицы из Файла
-	double** matrixA = ReadMatrixFromFile("matrixA.txt", &n1, &m1);
 
+	int n1, m1;
+	double** matrixA = ReadMatrixFromFile("matrixA.txt", &n1, &m1);
+	
 	if (matrixA) {
 		PrintMatrix(matrixA, n1, m1);
 
@@ -58,18 +56,17 @@ int main() {
 			cout << endl;
 			cout << "No Columns without negative elements" << endl;
 		}
-
 		FreeMatrix(matrixA, n1);
 
 		cout << endl << endl;
 
-		// Работа с матрицей А
 		cout << "--- Matrix B ---" << endl;
+
 		// Декларация строк и столбцов
 		int n2, m2;
 		// Чтение Матрицы из Файла
-		double** matrixB = ReadMatrixFromFile("matrixB.txt", &n1, &m1);
-
+		double** matrixB = ReadMatrixFromFile("matrixB.txt", &n2, &m2);
+		
 		if (matrixB) {
 			PrintMatrix(matrixB, n2, m2);
 
@@ -88,14 +85,14 @@ int main() {
 				cout << endl;
 				cout << "No Columns without negative elements" << endl;
 			}
-
 			FreeMatrix(matrixB, n2);
+		}
+		return 0;
 	}
-	return 0;
 }
 
 // Чтоение матрицы из Файла
-double** ReadMatrixFromFile(const char* filename, int* n, int* m)
+double** ReadMatrixFromFile(const char* filename, int* n, int* m) 
 {
 	// Файл
 	ifstream file(filename);
