@@ -35,18 +35,26 @@ void FreeMatrix(double** matrix, int n);
 int main() {
 	cout << "--- Matrix A ---" << endl;
 
+	// Декларация Строк и стиолбцов
 	int n1, m1;
+
+	// Декларация матрицы
 	double** matrixA = ReadMatrixFromFile("matrixA.txt", &n1, &m1);
 	
+	// Проверка ненулевой матрицы
 	if (matrixA) {
+		// Вывод матрицы
 		PrintMatrix(matrixA, n1, m1);
 
+		// Декларация переменных
 		double minSummA;
 		int columnCountA;
 
 		cout << "Columns without negative elements" << endl;
+		// Главный алгоритм
 		MatrixSumm(matrixA, n1, m1, &minSummA, &columnCountA);
 
+		// Проверка ненулевого значения
 		if (columnCountA > 0) {
 			cout << endl;
 			cout << "Column Count without negative elements" << columnCountA << endl;
@@ -56,10 +64,14 @@ int main() {
 			cout << endl;
 			cout << "No Columns without negative elements" << endl;
 		}
+
+		// Освобождение памяти
 		FreeMatrix(matrixA, n1);
 
+		// разделительная черта
 		cout << endl << endl;
 
+		// Дркгая матрица
 		cout << "--- Matrix B ---" << endl;
 
 		// Декларация строк и столбцов
@@ -67,26 +79,30 @@ int main() {
 		// Чтение Матрицы из Файла
 		double** matrixB = ReadMatrixFromFile("matrixB.txt", &n2, &m2);
 		
-		if (matrixB) {
-			PrintMatrix(matrixB, n2, m2);
+		// Вывод матрицы B		
+		PrintMatrix(matrixB, n2, m2);
 
-			double minSummB;
-			int columnCountB;
+		// Декларация переменных
+		double minSummB;
+		int columnCountB;
 
-			cout << "Columns without negative elements" << endl;
-			MatrixSumm(matrixB, n2, m2, &minSummB, &columnCountB);
+		cout << "Columns without negative elements" << endl;
+		// Главный алгоритм
+		MatrixSumm(matrixB, n2, m2, &minSummB, &columnCountB);
 
-			if (columnCountB > 0) {
-				cout << endl;
-				cout << "Column Count without negative elements" << columnCountB << endl;
-				cout << "MinSumm" << fixed << setprecision(2) << minSummB << endl;
-			}
-			else {
-				cout << endl;
-				cout << "No Columns without negative elements" << endl;
-			}
-			FreeMatrix(matrixB, n2);
+		// Проверка ненулевого значения
+		if (columnCountB > 0) {
+			cout << endl;
+			cout << "Column Count without negative elements" << columnCountB << endl;
+			cout << "MinSumm" << fixed << setprecision(2) << minSummB << endl;
 		}
+		else {
+			cout << endl;
+			cout << "No Columns without negative elements" << endl;
+		}
+		// Освобождение памяти
+		FreeMatrix(matrixB, n2);
+		
 		return 0;
 	}
 }
