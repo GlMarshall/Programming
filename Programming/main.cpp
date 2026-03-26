@@ -64,7 +64,7 @@ int main() {
     cout << "\n\n";
 
 
-    cout << "=== Working With matrix B ===" << endl;
+    cout << "--- Working With matrix B ---" << endl;
     // Декларация строк и столбцов
     int n2, m2;
     // Получение матрицы из файла
