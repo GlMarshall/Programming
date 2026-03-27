@@ -20,13 +20,37 @@
 
 #include <iostream> //Библиотека для ввода/вывода
 #include <fstream> //Библиотека для работы с файлами
+
 using namespace std;
+char* ReadFromFile(const char* filename) {
+    int lenstr_1 = 0; //Длина первой строки
+    int maxlen = 1000;
+    const char str_1[maxlen];
+    ifstream file1(filename); //Создание потока чтения из первого файла
+    if (!file1)
+    { // Обработка ошибки открытия файла
+        cout << "Файл " << filename<< " не найден!" << endl;
+        return NULL;
+    } //if
+    file1.getline(str_1, maxlen); //Чтение строки из потока вывода
+
+    for (int i = 0; str_1[i] != '\0'; i++)
+    { //Определение длины первой строки
+        lenstr_1++;
+    } //for
+    if (lenstr_1 == 0)
+    { //Если файл - пустой
+        cout << "Файл " << filename << " пустой!" << endl;
+        return str_1;
+    } //if
+}
 int main()
 { //Начало программы
     system("color F0"); //Экран-белый, буквы-чёрные
     setlocale(LC_ALL, "RUSSIAN"); //Подключение русского языка
     //Объявление переменных
-    int lenstr_1 = 0; //Длина первой строки
+    int lenstr_1 = sizeof(ReadFromFile("stroka_1.txt"));
+    cout << lenstr_1 << endl;
     int lenstr_2 = 0; //Длина второй  строки
     const int maxlen = 1000; //Константа для задания размера строки до его настоящего определения
     char str_1[maxlen]; //Первая строка
@@ -45,23 +69,7 @@ int main()
     int ew = 0; //Конец слова
     int i, j, n, w, k; //Переменные для циклов
 
-    ifstream file1(read_file_1); //Создание потока чтения из первого файла
-    if (!file1)
-    { // Обработка ошибки открытия файла
-        cout << "Файл " << read_file_1 << " не найден!" << endl;
-        return 1;
-    } //if
-    file1.getline(str_1, maxlen); //Чтение строки из потока вывода
-
-    for (i = 0; str_1[i] != '\0'; i++)
-    { //Определение длины первой строки
-        lenstr_1++;
-    } //for
-    if (lenstr_1 == 0)
-    { //Если файл - пустой
-        cout << "Файл " << read_file_1 << " пустой!" << endl;
-        return 1;
-    } //if
+    
     //Вывод первой строки и её длины
     cout << "Первая строка: " << str_1 << endl;
     cout << "Длина первой строки: " << lenstr_1 << endl << endl;
