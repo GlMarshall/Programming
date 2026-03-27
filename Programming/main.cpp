@@ -1,4 +1,22 @@
-﻿#include <iostream>
+﻿/**************************************************************************
+* Project Type: win32_console_Application                                 *
+* Project Name:  C:\Users\fe1nfly\source\repos\Laba№1_2semestr            *
+* File Name:   Laba№1_2semestr.cpp                                        *
+* Language: C++, Microsoft  Visual Studio 2022                            *
+* Programmers: Бригада №2                                                 *
+* Programmer (1): Дудукалов Глеб Максимович                               *
+* Programmer (2): Ривоненко Никита Павлович                               *
+* Modified by:                                                            *
+* Created: 09.03.2026                                                     *
+* Last Revision: 11.03.2026                                               *
+* Comment:                                                                *
+* Тема:«Символьные данные»                                                *
+* 1) Печать всех слов строки, в которых все буквы различны;               *
+* 2) Объединение символов двух строк в строку, в которой символы исходных *
+*    строк чередуются через два.                                          *
+**************************************************************************/
+
+#include <iostream>
 #include <fstream>
 using namespace std;
 
