@@ -1,327 +1,235 @@
-﻿/**************************************************************************
-* Project Type: win32_console_Application                                 *
-* Project Name:  C:\Users\fe1nfly\source\repos\Laba№1_2semestr            *
-* File Name:   Laba№1_2semestr.cpp                                        *
-* Language: C++, Microsoft  Visual Studio 2022                            *
-* Programmers: Бригада №2                                                 *
-* Programmer (1): Дудукалов Глеб Максимович                               *
-* Programmer (2): Ривоненко Никита Павлович                               *
-* Modified by:                                                            *
-* Created: 09.03.2026                                                     *
-* Last Revision: 11.03.2026                                               *
-* Comment:                                                                *
-* Тема:«Символьные данные»                                                *
-* 1) Печать всех слов строки, в которых все буквы различны;               *
-* 2) Объединение символов двух строк в строку, в которой символы исходных *
-*    строк чередуются через два.                                          *
-**************************************************************************/
-
-
-
-#include <iostream> //Библиотека для ввода/вывода
-#include <fstream> //Библиотека для работы с файлами
-
+﻿#include <iostream>
+#include <fstream>
 using namespace std;
-char* ReadFromFile(const char* filename) {
-    int lenstr_1 = 0; //Длина первой строки
-    int maxlen = 1000;
-    const char str_1[maxlen];
-    ifstream file1(filename); //Создание потока чтения из первого файла
-    if (!file1)
-    { // Обработка ошибки открытия файла
-        cout << "Файл " << filename<< " не найден!" << endl;
-        return NULL;
-    } //if
-    file1.getline(str_1, maxlen); //Чтение строки из потока вывода
 
-    for (int i = 0; str_1[i] != '\0'; i++)
-    { //Определение длины первой строки
-        lenstr_1++;
-    } //for
-    if (lenstr_1 == 0)
-    { //Если файл - пустой
-        cout << "Файл " << filename << " пустой!" << endl;
-        return str_1;
-    } //if
+const int maxlen = 1000;
+
+int GetStringLength(const char* str);
+int ReadFromFile(const char* filename, char* buffer, int maxLen);
+bool HasUniqueLettersInWord(const char* str, int start, int end);
+void FindANdPrintUniqueLetterWords(const char* str, int length, const char* title, int& differentWordCount);
+void CombineString(const char* str, int len1, const char* str2, int len2, char* result);
+
+int main() {
+	char str_1[maxlen];
+	char str_2[maxlen];
+	char str_new[maxlen];
+	const char* readFile_1 = "stroka_1.txt";
+	const char* readFile_2 = "stroka_2.txt";
+
+	int lenstr_1 = 0;
+	int lenstr_2 = 0;
+	int differentwords1 = 0;
+	int disserentwords2 = 0;
+
+	lenstr_1 = ReadFromFile(readFile_1, str_1, maxlen);
+	if (lenstr_1 == -1) {
+		return 1;
+	}
+
+	lenstr_2 = ReadFromFile(readFile_2, str_2, maxlen);
+	if (lenstr_2 == -1) {
+		return 1;
+	}
+
+	FindANdPrintUniqueLetterWords(str_1, lenstr_1, "First String", differentwords1);
+	if (differentwords1 == 0) {
+		return 1;
+	}
+
+	cout << endl;
+	FindANdPrintUniqueLetterWords(str_2, lenstr_2, "First String", disserentwords2);
+	if (disserentwords2 == 0) {
+		return 1;
+	}
+
+	cout << endl;
+	cout << "Word Count without repitable letters in two string " << differentwords1 + disserentwords2 << endl;
+	cout << endl;
+	cout << "Combine string: ";
+	CombineString(str_1, lenstr_1, str_2, lenstr_2, str_new);
+	cout << str_new << endl;
+	return 0;
 }
-int main()
-{ //Начало программы
-    system("color F0"); //Экран-белый, буквы-чёрные
-    setlocale(LC_ALL, "RUSSIAN"); //Подключение русского языка
-    //Объявление переменных
-    int lenstr_1 = sizeof(ReadFromFile("stroka_1.txt"));
-    cout << lenstr_1 << endl;
-    int lenstr_2 = 0; //Длина второй  строки
-    const int maxlen = 1000; //Константа для задания размера строки до его настоящего определения
-    char str_1[maxlen]; //Первая строка
-    char str_2[maxlen]; //Вторая строка
-    char str_new[maxlen]; //Новая строка
-    const char* read_file_1 = "stroka_1.txt"; //Файл с первой строкой
-    const char* read_file_2 = "stroka_2.txt"; //Файл со второй строкой
-    bool check_letter = false; //Показывает наличие одинаковых букв в слове
-    int check_words1 = 0; //Проверяет наличие слов в первой строке
-    int check_words2 = 0; //Проверяет наличие слов во второй строке
-    int numberword = 0; //Номер слова с разными буквами в строке
-    int differentwords1 = 0; //Количество слов с разными буквами в первой строке
-    int differentwords2 = 0; //Количество слов с разными буквами во второй строке
-    int ostlen; //Разность длин между строками
-    int bw = 0; //Начало слова
-    int ew = 0; //Конец слова
-    int i, j, n, w, k; //Переменные для циклов
 
-    
-    //Вывод первой строки и её длины
-    cout << "Первая строка: " << str_1 << endl;
-    cout << "Длина первой строки: " << lenstr_1 << endl << endl;
-    ifstream file2(read_file_2); //Создание потока чтения из второго файла
-    if (!file2)
-    { // Обработка ошибки открытия файла
-        cout << "Файл " << read_file_2 << " не найден!" << endl;
-        return 1;
-    } //if
-    file2.getline(str_2, maxlen); //Чтение строки из потока вывода
-    for (i = 0; str_2[i] != '\0'; i++)
-    { //Определение длины первой строки
-        lenstr_2++;
-    } //for
-    if (lenstr_2 == 0)
-    { //Если файл - пустой
-        cout << "Файл " << read_file_2 << " пустой!" << endl;
-        return 1;
-    } //if
-    //Вывод второй строки и её длины
-    cout << "Вторая строка: " << str_2 << endl;
-    cout << "Длина второй строки: " << lenstr_2 << endl << endl;
+int GetStringLength(const char* str)
+{
+	int length = 0;
+	while (str[length] != '\0') {
+		length++;
+	}
+	return length;
+}
 
+int ReadFromFile(const char* filename, char* buffer, int maxLen)
+{
+	ifstream file(filename);
+	if (!file) {
+		cout << "Cannot Open File " << filename << endl;
+		return -1;
+	}
+	
+	file.getline(buffer, maxlen);
+	int length = GetStringLength(buffer);
 
-    cout << "Проверка первой строки на наличие слов без повторяющихся букв: " << endl;
-    i = 0;
-    while (i < lenstr_1)
-    { //Проверка первой строки на наличие слов с разными буквами
-        while ((str_1[i] == ' ') && (i < lenstr_1))
-        { //Пропускаем пробелы
-            i++;
-        } //while
-        bw = i; //Запоминаем начало слова и конец слова приравниваем к нему
-        ew = bw;
-        while ((str_1[i] != ' ') && (i < lenstr_1))
-        { //Находим конец слова
-            check_words1++;
-            i++;
-            ew++;
-        } //while
-        ew--; //Возвращаемся в последний элемент слова
-        numberword++; //увеличиваем порядковый номер в строке
-        check_letter = false; //обновляем check_letter
-        for (n = bw; n <= ew; n++)
-        { //Ищем повторяющиеся буквы в словах, идём от начала слова
-            for (j = ew; j > n; j--)
-            { //Идём с конца слова и сравниваем со значениями главного цикла
-                if (str_1[n] == str_1[j])
-                { //Помечаем, что нашли совпадение и выходим из циклов
-                    check_letter = true;
-                    break;
-                } //if
-            } //for j
-        } //for n
-        //Если нашли слово без повторяющихся символов, то увеличиваем счётчик
-        if ((!check_letter) && (check_words1 != 0) && (bw <= ew))
-        {
-            differentwords1++;
-            //Вывод слова, его порядкого номера
-            cout << "Слово номер " << numberword << " без повторяющихся букв: ";
-            for (j = bw; j <= ew; j++)
-            {
-                cout << str_1[j];
-            } //for j
-            //Вывод индексов начала и конца слова
-            cout << "  начало слова: " << bw << ", конец слова: " << ew << endl;
-        } //if
-    } //while
-    if (check_words1 == 0)
-    { //В строке нет слов
-        cout << "Нет слов в первой строке!" << endl;
-        return 1;
-    } //if
-    if (differentwords1 == 0)
-    { //В первой строке только слова с повторяющимися буквами
-        cout << "В первой строке есть только слова с повторяющимися буквами!" << endl;
-        return 1;
-    } //if
-    cout << "В первой строке есть " << differentwords1 << " слов без повторяющихся букв" << endl;
+	if (length == 0) {
+		cout << "File " << filename << " is empty" << endl;
+		return -1;
+	}
 
+	return length;
+}
 
+bool HasUniqueLettersInWord(const char* str, int start, int end)
+{
+	for (int i = start; i <= end; i++)
+	{
+		for (int j = end; j > i; j--)
+		{
+			if (str[i] == str[j])
+				return false;
+		}
+	}
+	return true;
+}
 
-    cout << endl << "Проверка второй строки на наличие слов без повторяющихся букв: " << endl;
-    i = 0;
-    numberword = 0;
-    while (i < lenstr_2)
-    { //Проверка второй строки на наличие слов с разными буквами
-        while ((str_2[i] == ' ') && (i < lenstr_2))
-        { //Пропускаем пробелы
-            i++;
-        } //while
-        bw = i; //Запоминаем начало слова и конец слова приравниваем к нему
-        ew = bw;
-        while ((str_2[i] != ' ') && (i < lenstr_2))
-        { //Находим конец слова
-            check_words2++;
-            i++;
-            ew++;
-        } //while
-        ew--; //Возвращаемся в последний элемент слова
-        numberword++; //увеличиваем порядковый номер в строке
-        check_letter = false; //обновляем check_letter
-        int n = 0;
-        for (n = bw; n <= ew; n++)
-        { //Ищем повторяющиеся буквы в словах, идём от начала слова
-            for (j = ew; j > n; j--)
-            { //Идём с конца слова и сравниваем со значениями главного цикла
-                if (str_2[n] == str_2[j])
-                { //Помечаем, что нашли совпадение и выходим из циклов
-                    check_letter = true;
-                    break;
-                } //if
-            } //for j
-        } //for n
-        if ((!check_letter) && (check_words2 != 0) && (bw <= ew))
-        { //Если нашли слово без повторяющихся символов, то увеличиваем счётчик
-            differentwords2++;
-            //Вывод слова, его порядкого номера
-            cout << "Слово номер " << numberword << " без повторяющихся букв: ";
-            for (j = bw; j <= ew; j++)
-            {
-                cout << str_2[j];
-            } //for
-            //Вывод индексов начала и конца слова
-            cout << "  начало слова: " << bw << ", конец слова: " << ew << endl;
-        } //if
-    } //while
-    if (check_words2 == 0)
-    { //В строке нет слов
-        cout << "Нет слов во второй строке!" << endl;
-        return 1;
-    } //if
-    if (differentwords2 == 0)
-    { //В первой строке только слова с повторяющимися буквами
-        cout << "Во второй строке есть только слова с повторяющимися буквами!" << endl;
-        return 1;
-    } //if
-    cout << "Во второй строке есть " << differentwords2 << " слов без повторяющихся букв" << endl;
-    cout << endl << "Количество слов без повторяющихся букв в двух строках - " << differentwords1 + differentwords2 << endl;
+void FindANdPrintUniqueLetterWords(const char* str, int length, const char* title, int& differentWordCount)
+{
+	int i = 0;
+	int numberWord = 0;
+	int check_words = 0;
+	differentWordCount = 0;
 
+	while (i < length) {
+		while ((str[i] == ' ') && (i < length)) {
+			i++;
+		}
+		int bw = i;
+		int ew = bw;
 
-    cout << endl << "Объединение символов двух строк в строку, в которой символы исходных строк чередуются через два" << endl;
+		while ((str[i] != ' ') && (i < length)) {
+			check_words += 1;
+			i++;
+			ew++;
+		}
+		ew--;
+		numberWord += 1;
 
-    //Объединение символов двух строк в строку, в которой символы исходных строк чередуются через два.В первой строке больше символов, чем во второй ?
-    k = 0;
-    w = 0;
-    if (lenstr_1 > lenstr_2)
-    {
-        ostlen = lenstr_1 - lenstr_2;
-        if (lenstr_2 % 2 != 0)
-        {
-            //Длина меньшей строки нечётна ?
-            j = 0;
-            while (w < lenstr_2 - 1)
-            { //Добавление элементов в новую строку до последней пары чисел в меньшей строке
-                str_new[k] = str_1[w];
-                str_new[k + 1] = str_1[w + 1];
-                str_new[k + 2] = str_2[w];
-                str_new[k + 3] = str_2[w + 1];
-                k = k + 4;
-                w = w + 2;
-            } //while
-            //Добавление в новую строку последней пары символов из первой строки и последнего символа из второй
-            str_new[k] = str_1[w];
-            str_new[k + 1] = str_1[w + 1];
-            str_new[k + 2] = str_2[w];
-            k = k + 3;
-            int sdwig = 1;
-            while (j < ostlen)
-            { //Добавление в новую строку оставшихся символов из первой строки
-                str_new[k] = str_1[lenstr_2 + sdwig];
-                j++;
-                sdwig++;
-                k++;
-            } //while
-        } //if
-        else
-        { //Длина меньшей строки чётна
-            j = 0;
-            while (w < lenstr_2)
-            { //Добавление элементов в новую строку до последней пары чисел в меньшей строке
-                str_new[k] = str_1[w];
-                str_new[k + 1] = str_1[w + 1];
-                str_new[k + 2] = str_2[w];
-                str_new[k + 3] = str_2[w + 1];
-                k = k + 4;
-                w = w + 2;
-            } //while
-            int sdwig = 0;
-            while (j < ostlen)
-            {   //Добавление в новую строку оставшихся символов из первой строки
-                str_new[k] = str_1[lenstr_2 + sdwig];
-                j++;
-                sdwig++;
-                k++;
-            } //while
-            str_new[k] = '\0';
-        } //else
-    } //if
-    else
-    { //Вторая строка длиннее первой
-        ostlen = lenstr_2 - lenstr_1;
-        if (lenstr_1 % 2 != 0)
-        { //Меньшая строка нечётна
-            j = 0;
-            while (w < lenstr_1 - 1)
-            {//Добавление элементов в новую строку до последней пары чисел в меньшей строке
-                str_new[k] = str_1[w];
-                str_new[k + 1] = str_1[w + 1];
-                str_new[k + 2] = str_2[w];
-                str_new[k + 3] = str_2[w + 1];
-                k = k + 4;
-                w = w + 2;
-            } //while
-            //Добавление в новую строку последней пары символов из второй строки и последнего символа из первой
-            str_new[k] = str_1[w];
-            str_new[k + 1] = str_2[w];
-            str_new[k + 2] = str_2[w + 1];
-            k = k + 3;
-            int sdwig = 1;
-            while (j < ostlen)
-            { //Добавление в новую строку оставшихся символов из второй строки
-                str_new[k] = str_2[lenstr_1 + sdwig];
-                j++;
-                sdwig++;
-                k++;
-            } //while
-        } //if
-        else
-        { //Меньшая строка чётна
-            j = 0;
-            while (w < lenstr_1)
-            { //Добавление элементов в новую строку до последней пары чисел в меньшей строке
-                str_new[k] = str_1[w];
-                str_new[k + 1] = str_1[w + 1];
-                str_new[k + 2] = str_2[w];
-                str_new[k + 3] = str_2[w + 1];
-                k = k + 4;
-                w = w + 2;
-            } //while
-            int sdwig = 0;
-            while (j < ostlen)
-            { //Добавление в новую строку оставшихся символов из второй строки
-                str_new[k] = str_2[lenstr_1 + sdwig];
-                j++;
-                sdwig++;
-                k++;
-            } //while
-            str_new[k] = '\0';
-        } //else
-    } //else
-    cout << "Получившаяся строка: " << str_new << endl;
-    system("pause"); //Создаёт точку остановки в программе, позволяя посмотреть вывод перед закрытием консоли
-    return 0;
-} //main
+		if (HasUniqueLettersInWord(str, bw, ew)) {
+			differentWordCount += 1;
+			cout << "Word number " << numberWord << "without repitable words";
+			for (int i = 0; i < ew; i++)
+			{
+				cout << str[i];
+			}
+			cout << " ford start: " << bw << " word end " << ew << endl;
+		}
+	}
+	if (check_words == 0) {
+		cout << "No words in " << title << endl;
+	}
+	else if (differentWordCount == 0) {
+		cout << "In " << title << " exists words with only repitable letters";
+	}
+	else {
+		cout << "In " << title << " exists " << differentWordCount << " without repitable letters" << endl;
+	}
+}
+
+void CombineString(const char* str, int len1, const char* str2, int len2, char* result)
+{
+	int i = 0;
+	int j = 0;
+
+	if (len1 < len2) {
+		int ostlen = len1 - len2;
+
+		if (len2 % 2 != 0) {
+			int k = 0;
+			while (j < len2 - 1) {
+				result[i] = str[j];
+				result[i + 1] = str[j + 1];
+				result[i + 2] = str2[j];
+				result[i + 3] = str2[j + 1];
+				i += 4;
+				j += 2;
+			}
+
+			result[i] = str[j];
+			result[i + 1] = str[j + 1];
+			result[i + 2] = str2[j];
+			i += 3;
+
+			int sdwig = 1;
+			while (k < ostlen) {
+				result[i] = str[len2 + sdwig];
+				k++;
+				sdwig++;
+				i++;
+			}
+		}
+		else {
+			int k = 0;
+			while (j < len2) {
+				result[i] = str[j];
+				result[i + 1] = str[j + 1];
+				result[i + 2] = str2[j];
+				result[i + 3] = str2[j + 1];
+				i += 4;
+				j += 2;
+			}
+			int sdwig = 0;
+			while (k < ostlen) {
+				result[i] = str[len2 + sdwig];
+				k++;
+				sdwig++;
+				i++;
+			}
+			result[i] = '\0';
+		}
+	}
+	else {
+		int ostlen = len1 - len2;
+		if (len1 % 2 != 0) {
+			int k = 0;
+			while (j < len1 - 1) {
+				result[i] = str[j];
+				result[i + 1] = str[j + 1];
+				result[i + 2] = str2[j];
+				result[i + 3] = str2[j + 1];
+				i += 4;
+				j += 2;
+			}
+			result[i] = str[j];
+			result[i + 1] = str[j + 1];
+			result[i + 2] = str2[j];
+			i += 3;
+			int sdwig = 1;
+			while (k < ostlen) {
+				result[i] = str[len2 + sdwig];
+				k++;
+				sdwig++;
+				i++;
+			}
+		}
+		else {
+			int k = 0;
+			while (j < len1) {
+				result[i] = str[j];
+				result[i + 1] = str[j + 1];
+				result[i + 2] = str2[j];
+				result[i + 3] = str2[j + 1];
+				i += 4;
+				j += 2;
+			}
+			int sdwig = 0;
+			while (k < ostlen) {
+				result[i] = str[len2 + sdwig];
+				k++;
+				sdwig++;
+				i++;
+			}
+			result[i] = '\0';
+		}
+	}
+}
