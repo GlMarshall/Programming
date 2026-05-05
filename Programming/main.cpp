@@ -25,17 +25,17 @@ using namespace std;
 
 enum ERROR_MESSAGE
 {
-    NO_ERRORS,
-    FILE_NOT_FOUND,
-    FILE_EMPTY,
-    MARTIX_SIZE,
-    NUMBER_OF_ROWS,
-    ROWS_GREATER_THAN_MAX_SIZE,
-    COLUMNS_GREATER_THAN_MAX_SIZE,
-    NUMBER_OF_COLUMNS,
-    NOT_ENOUGHT_ELEMENTS,
-    TOO_MANY_EMELENTS,
-    READING_ELEMENT,
+    NO_ERRORS,                      // 0
+    FILE_NOT_FOUND,                 // 1
+    FILE_EMPTY,                     // 2
+    MARTIX_SIZE,                    // 3
+    NUMBER_OF_ROWS,                 // 4
+    ROWS_GREATER_THAN_MAX_SIZE,     // 5
+    COLUMNS_GREATER_THAN_MAX_SIZE,  // 6
+    NUMBER_OF_COLUMNS,              // 7
+    NOT_ENOUGHT_ELEMENTS,           // 8
+    TOO_MANY_EMELENTS,              // 9
+    READING_ELEMENT,                // 10
 };
 
 //Константа для максимального размера статической матрицы
@@ -383,17 +383,27 @@ double** ReadMatrPointer(const char* filename, int& n, int& m, int number)
         return nullptr; //Возвращение нулевого указателя
     }
     //Количество строк ненатуральное число
-    if (n <= 0 || n > MAX_SIZE)
+    if (n <= 0)
     {
         err = 4; //Код ошибки 4
         PrintErrorMessage(err, filename, number); //Вывод сообщения об ошибке
         return nullptr; //Возвращение нулевого указателя
     }
-    if (m <= 0 || m > MAX_SIZE) //Количество столбцов ненатуральное число
+    if (n > MAX_SIZE) {
+        err = 5;
+        PrintErrorMessage(err, filename, number);
+        return nullptr;
+    }
+    if (m <= 0) //Количество столбцов ненатуральное число
     {
-        err = 5; //Код ошибки 5
+        err = 7; //Код ошибки 5
         PrintErrorMessage(err, filename, number); //Вывод сообщения об ошибке
         return nullptr; //Возвращение нулевого укказателя
+    }
+    if (m > MAX_SIZE) {
+        err = 6;
+        PrintErrorMessage(err, filename, number);
+        return nullptr;
     }
 
     //Выделение динамической памяти под матрицу
@@ -417,14 +427,14 @@ double** ReadMatrPointer(const char* filename, int& n, int& m, int number)
             {
                 if (file.eof()) //Если в файле элементов меньше чем указано
                 {
-                    err = 6; //Код ошибки 6
+                    err = 8; //Код ошибки 6
                     PrintErrorMessage(err, filename, number); //Вывод сообщения об ошибке
                 }
                 else //Ошибка при чтении элемента
                 {
                     errorRow = i + 1; //Строка элемента с ошибкой
                     errorCol = j + 1; //Столбец элемента с ошибкой
-                    err = 8; //Код ошибки 8
+                    err = 10; //Код ошибки 8
                     PrintErrorMessage(err, filename, number, errorRow, errorCol); //Вывод сообщения об ошибке
                 }
                 error = true; //Фиксируем ошибку
@@ -437,7 +447,7 @@ double** ReadMatrPointer(const char* filename, int& n, int& m, int number)
         double symbol; //Переменная для проверки файла на наличие лишних символов
         if (file >> symbol) //Нашлилишний символ
         {
-            err = 7; //Код ошибки 7
+            err = 9; //Код ошибки 7
             PrintErrorMessage(err, filename, number); //Вывод сообщения об ошибке
             error = true; //Фиксируем ошибку
         }
