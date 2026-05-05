@@ -1,4 +1,24 @@
-﻿#include <iostream>
+﻿/***************************************************************************
+* Project Type: win32_console_Application                                  *
+* Project Name: C:\Users\fe1nfly\source\repos\Prog_laba_2                  *
+* File Name: Prog_laba_1.cpp                                               *
+* Language: C++, Microsoft  Visual Studio 2022                             *
+* Programmers: Бригада №2                                                  *
+* Programmer (1): Дудукалов Глеб Максимович                                *
+* Programmer (2): Ривоненко Никита Павлович                                *
+* Modified by:                                                             *
+* Created: 05.04.2026                                                      *
+* Last Revision: NO_DATA                                                   *
+* Comment:                                                                 *
+* Тема:«Двумерные массивы»                                                 *
+* 1) Определить сумму элементов в тех столбцах матрицы, которые не         *
+*    содержат отрицательных элементов;                                     *
+* 2) Определить минимум среди найденных сумм                               *
+* Алгоритм должен быть параметризирован.                                   *
+* Реализовать программу в двух вариантах: через индексы и указатели        *
+***************************************************************************/
+
+#include <iostream>
 #include <fstream>
 using namespace std;
 
