@@ -25,7 +25,7 @@ using namespace std;
 
 enum ERROR_MESSAGE
 {
-    NO_ERRORS,                      // 0
+    NO_ERRORS = 0,                  // 0
     FILE_NOT_FOUND,                 // 1
     FILE_EMPTY,                     // 2
     MARTIX_SIZE,                    // 3
