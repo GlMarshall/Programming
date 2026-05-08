@@ -248,14 +248,14 @@ int ReadMatrIndex(const char* filename, double Matr[][MAX_SIZE], int& n, int& m,
                 if (file.eof()) //Файл закончился раньше положенного
                 {
                     file.close(); //Закрытие потока чтения из файла
-                    return NOT_ENOUGHT_ELEMENTS; //Возвращение кода ошибки 6
+                    return NOT_ENOUGHT_ELEMENTS; //Возвращение кода ошибки 8
                 }
                 else //Ошибка при чтении элемента матрицы
                 {
                     errorRow = i + 1; //Номер строки элемента с ошибкой
                     errorCol = j + 1; //Номер столбца элемента с ошибкой
                     file.close(); //Закрытие потока чтения из файла
-                    return READING_ELEMENT; //Возвращение кода ошибки 8
+                    return READING_ELEMENT; //Возвращение кода ошибки 10
                 }
             }
         }
@@ -264,7 +264,7 @@ int ReadMatrIndex(const char* filename, double Matr[][MAX_SIZE], int& n, int& m,
     if (file >> symbol) //Нашли лишний символ
     {
         file.close(); //Закрытие потока чтения из файла
-        return TOO_MANY_EMELENTS; //Возвращение кода ошибки 7
+        return TOO_MANY_EMELENTS; //Возвращение кода ошибки 9
     }
     file.close(); //Закрытие потока чтения из файла
     return NO_ERRORS; //Ошибок не обнаружили
